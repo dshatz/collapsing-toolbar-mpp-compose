@@ -2,8 +2,7 @@ name: Build Multiplatform project
 on:
   push:
     branches:
-      - main
-      - feature/ci_support
+      - release/*
   pull_request:
 
 jobs:
@@ -22,4 +21,8 @@ jobs:
           java-version: '17'
       - name: Build Multiplatform project
         shell: bash
-        run: ./gradlew assemble
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNINGINMEMORYKEY }}
+        run: ./gradlew lib:publishAllPublicationsToMavenCentralRepository
